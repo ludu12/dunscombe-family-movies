@@ -8,7 +8,8 @@
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write **/*.{js,ts,tsx}",
     "lint": "eslint --fix '{components,lib,pages,styles}/**/*.{js,jsx,ts,tsx}'",
-    "start": "next start"
+    "start": "next start",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
