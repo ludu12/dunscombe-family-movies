@@ -8,6 +8,7 @@
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write **/*.{js,ts,tsx}",
     "lint": "eslint --fix '{components,lib,pages,styles}/**/*.{js,jsx,ts,tsx}'",
+    "lint-staged": "lint-staged",
     "start": "next start",
     "prepare": "husky install"
   },
