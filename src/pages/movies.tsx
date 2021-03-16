@@ -19,8 +19,8 @@ const Movies: React.FC<{ movies: IMovie[] }> = (props) => {
               as={`/movies/${movie.id}`}
               passHref
             >
-              <div className="border border-grey-light bg-white rounded p-4 flex justify-between cursor-pointer">
-                <div>
+              <div className="border border-grey-light bg-white rounded p-4 flex justify-between cursor-pointer m-4 flex-1">
+                <div className="flex flex-col justify-between">
                   <p className="text-sm text-grey-dark">{movie.name}</p>
                   <div className="text-black font-bold text-xl mb-2">
                     {movie.description}
