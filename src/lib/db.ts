@@ -1,5 +1,4 @@
-import path from 'path';
-import fs from 'fs';
+import data from './data.json';
 
 export interface IMovie {
   id: string;
@@ -12,9 +11,7 @@ export interface IMovie {
 }
 
 export function getAllMovies(): IMovie[] {
-  const fullPath = path.join(process.cwd(), 'db', 'data.json');
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  return JSON.parse(fileContents) as IMovie[];
+  return data as IMovie[];
 }
 
 export function getMovieById(id: string): IMovie {

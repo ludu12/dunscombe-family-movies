@@ -12,6 +12,7 @@ function toMovieUrl(movie: IMovie): string {
 
 const Movie: React.FC<{ movie: IMovie }> = (props) => {
   const { movie } = props;
+
   return (
     <Layout title={movie.name}>
       <main className="m-auto lg:mx-16">
@@ -36,7 +37,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     params: { id: movie.id },
   }));
 
-  return { paths, fallback: true };
+  return { paths, fallback: false };
 };
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const movie = getMovieById(params.id as string);
