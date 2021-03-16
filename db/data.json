@@ -1,0 +1,13 @@
+[
+  {
+    "id": "0801fa21-29a4-4442-ab00-c1af98bc0f17",
+    "name": "disc2_1993",
+    "HSL_URL": "/AppleHLS1/disc2_1993.m3u8",
+    "DASH_URL": "/DASHISO1/disc2_1993.mpd",
+    "MP4_URL": "/FileGroup1/disc2_1993_Mp4_Avc_Aac_16x9_1920x1080p_24Hz_8.5Mbps_qvbr.mp4",
+    "tags": [
+      "1993"
+    ],
+    "description": "Summer of 1993"
+  }
+]
