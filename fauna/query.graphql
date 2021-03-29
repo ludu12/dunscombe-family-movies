@@ -1,0 +1,96 @@
+query AllMovies(
+    $_size: Int
+    $_cursor: String
+) {
+    allMovies(_size:$_size _cursor:$_cursor){
+        after
+        before
+        data {
+            _ts
+            _id
+            guid
+            name
+            description
+            HSL_URL
+            DASH_URL
+            MP4_URL
+            tags {
+                data {
+                    name
+                }
+            }
+            moments {
+                data {
+                    timestamp
+                    description
+                }
+            }
+            thumbnailUrl
+        }
+    }
+}
+
+query AllTags(
+    $_size: Int
+    $_cursor: String
+) {
+    allTags(_size:$_size _cursor:$_cursor){
+        after
+        before
+        data {
+            _id
+            name
+        }
+    }
+}
+
+
+query FindMovieByGuid($guid: String!) {
+    findMovieByGuid(guid: $guid) {
+        _ts
+        _id
+        guid
+        name
+        description
+        HSL_URL
+        DASH_URL
+        MP4_URL
+        tags {
+            data {
+                name
+            }
+        }
+        moments {
+            data {
+                timestamp
+                description
+            }
+        }
+        thumbnailUrl
+    }
+}
+
+query FindMovieByID($id: ID!) {
+    findMovieByID(id: $id) {
+        _ts
+        _id
+        guid
+        name
+        description
+        HSL_URL
+        DASH_URL
+        MP4_URL
+        tags {
+            data {
+                name
+            }
+        }
+        moments {
+            data {
+                timestamp
+                description
+            }
+        }
+        thumbnailUrl
+    }
+}

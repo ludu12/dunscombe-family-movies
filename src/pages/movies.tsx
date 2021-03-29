@@ -1,11 +1,16 @@
 import React from 'react';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
-import { getAllMovies, IMovie } from '../lib/db';
 import Layout from '../components/Layout';
 import MovieTag from '../components/MovieTag';
+import {
+  AllMoviesDocument,
+  AllMoviesQuery,
+  Movie,
+} from '../lib/graphql.generated';
+import { graphqlRequest } from '../lib/rest-utils';
 
-const Movies: React.FC<{ movies: IMovie[] }> = (props) => {
+const Movies: React.FC<{ movies: Movie[] }> = (props) => {
   const { movies } = props;
 
   return (
@@ -14,9 +19,9 @@ const Movies: React.FC<{ movies: IMovie[] }> = (props) => {
         <div className="flex flex-wrap p-4">
           {movies.map((movie) => (
             <Link
-              key={movie.id}
-              href="/movies/[id]"
-              as={`/movies/${movie.id}`}
+              key={movie._id}
+              href="/movies/[guid]"
+              as={`/movies/${movie.guid}`}
               passHref
             >
               <div className="border border-grey-light bg-white rounded p-4 flex justify-between cursor-pointer m-4 flex-1">
@@ -27,8 +32,8 @@ const Movies: React.FC<{ movies: IMovie[] }> = (props) => {
                   </div>
                   <div className="flex flex-wrap items-center">
                     <div>Tags: </div>
-                    {movie.tags.map((t) => (
-                      <MovieTag key={t} tag={t} />
+                    {movie.tags.data.map((t) => (
+                      <MovieTag key={t._id} tag={t.name} />
                     ))}
                   </div>
                 </div>
@@ -42,10 +47,17 @@ const Movies: React.FC<{ movies: IMovie[] }> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const movies = getAllMovies();
+  const request = JSON.stringify({
+    query: AllMoviesDocument,
+  });
+  const response = await graphqlRequest<{
+    data: AllMoviesQuery;
+    errors: { message: string }[];
+  }>(request, process.env.FAUNA_SERVER_KEY);
+
   return {
     props: {
-      movies,
+      movies: response.data.allMovies.data,
     },
     revalidate: 1,
   };

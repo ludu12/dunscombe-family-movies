@@ -1,0 +1,30 @@
+type Movie {
+  guid: String @unique
+  name: String!
+  shortDescription: String,
+  description: String
+  HSL_URL: String
+  DASH_URL: String!
+  MP4_URL: String
+  thumbnailUrl: String
+  tags: [Tag!] @relation
+  moments: [Moment!] @relation
+}
+
+type Tag {
+  name: String! @unique
+  movies: [Movie!]! @relation
+}
+
+type Moment {
+  timestamp: String
+  movie: Movie! @relation
+  description: String
+}
+
+
+type Query {
+  allMovies: [Movie!]!
+  allTags: [Tag!]!
+  findMovieByGuid(guid: String!): Movie @index(name: "unique_Movie_guid")
+}

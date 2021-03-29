@@ -1,0 +1,26 @@
+mutation UpdateMovie($id: ID!, $data:MovieInput!) {
+    updateMovie(id: $id, data: $data){
+        _ts
+        _id
+        guid
+        name
+        description
+        HSL_URL
+        DASH_URL
+        MP4_URL
+        tags {
+            data {
+                name
+            }
+        }
+        thumbnailUrl
+    }
+}
+
+mutation CreateTag($data:TagInput!) {
+    createTag(data: $data){
+        _ts
+        _id
+        name
+    }
+}

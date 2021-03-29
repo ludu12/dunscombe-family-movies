@@ -1,0 +1,18 @@
+overwrite: true
+schema:
+  - https://graphql.fauna.com/graphql:
+      headers:
+        Authorization: 'Bearer ${FAUNA_SERVER_KEY}'
+
+documents: "./fauna/**/*.graphql"
+generates:
+  src/lib/graphql.generated.ts:
+    plugins:
+      - add:
+          content: "import { endpointUrl } from './config';"
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-query"
+    config:
+      fetcher:
+        endpoint: 'endpointUrl'

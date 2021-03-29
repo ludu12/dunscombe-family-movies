@@ -3,3 +3,6 @@
 
 # Ignore built files except build/index.js
 .next/*
+
+fauna/
+*.generated.*
