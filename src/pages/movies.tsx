@@ -28,12 +28,12 @@ const Movies: React.FC<{ movies: Movie[] }> = (props) => {
                 <div className="flex flex-col justify-between">
                   <p className="text-sm text-grey-dark">{movie.name}</p>
                   <div className="text-black font-bold text-xl mb-2">
-                    {movie.description}
+                    {movie.shortDescription}
                   </div>
                   <div className="flex flex-wrap items-center">
                     <div>Tags: </div>
                     {movie.tags.data.map((t) => (
-                      <MovieTag key={t._id} tag={t.name} />
+                      <MovieTag key={t._id} tag={t} />
                     ))}
                   </div>
                 </div>
@@ -57,7 +57,9 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      movies: response.data.allMovies.data,
+      movies: response.data.allMovies.data.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      ),
     },
     revalidate: 1,
   };

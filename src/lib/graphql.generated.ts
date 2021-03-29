@@ -349,6 +349,7 @@ export type AllMoviesQuery = { __typename?: 'Query' } & {
             | '_id'
             | 'guid'
             | 'name'
+            | 'shortDescription'
             | 'description'
             | 'HSL_URL'
             | 'DASH_URL'
@@ -356,14 +357,16 @@ export type AllMoviesQuery = { __typename?: 'Query' } & {
             | 'thumbnailUrl'
           > & {
               tags: { __typename?: 'TagPage' } & {
-                data: Array<Maybe<{ __typename?: 'Tag' } & Pick<Tag, 'name'>>>;
+                data: Array<
+                  Maybe<{ __typename?: 'Tag' } & Pick<Tag, '_id' | 'name'>>
+                >;
               };
               moments: { __typename?: 'MomentPage' } & {
                 data: Array<
                   Maybe<
                     { __typename?: 'Moment' } & Pick<
                       Moment,
-                      'timestamp' | 'description'
+                      '_id' | 'timestamp' | 'description'
                     >
                   >
                 >;
@@ -397,6 +400,7 @@ export type FindMovieByGuidQuery = { __typename?: 'Query' } & {
       | '_id'
       | 'guid'
       | 'name'
+      | 'shortDescription'
       | 'description'
       | 'HSL_URL'
       | 'DASH_URL'
@@ -404,14 +408,16 @@ export type FindMovieByGuidQuery = { __typename?: 'Query' } & {
       | 'thumbnailUrl'
     > & {
         tags: { __typename?: 'TagPage' } & {
-          data: Array<Maybe<{ __typename?: 'Tag' } & Pick<Tag, 'name'>>>;
+          data: Array<
+            Maybe<{ __typename?: 'Tag' } & Pick<Tag, '_id' | 'name'>>
+          >;
         };
         moments: { __typename?: 'MomentPage' } & {
           data: Array<
             Maybe<
               { __typename?: 'Moment' } & Pick<
                 Moment,
-                'timestamp' | 'description'
+                '_id' | 'timestamp' | 'description'
               >
             >
           >;
@@ -432,6 +438,7 @@ export type FindMovieByIdQuery = { __typename?: 'Query' } & {
       | '_id'
       | 'guid'
       | 'name'
+      | 'shortDescription'
       | 'description'
       | 'HSL_URL'
       | 'DASH_URL'
@@ -439,14 +446,16 @@ export type FindMovieByIdQuery = { __typename?: 'Query' } & {
       | 'thumbnailUrl'
     > & {
         tags: { __typename?: 'TagPage' } & {
-          data: Array<Maybe<{ __typename?: 'Tag' } & Pick<Tag, 'name'>>>;
+          data: Array<
+            Maybe<{ __typename?: 'Tag' } & Pick<Tag, '_id' | 'name'>>
+          >;
         };
         moments: { __typename?: 'MomentPage' } & {
           data: Array<
             Maybe<
               { __typename?: 'Moment' } & Pick<
                 Moment,
-                'timestamp' | 'description'
+                '_id' | 'timestamp' | 'description'
               >
             >
           >;
@@ -531,17 +540,20 @@ export const AllMoviesDocument = `
       _id
       guid
       name
+      shortDescription
       description
       HSL_URL
       DASH_URL
       MP4_URL
       tags {
         data {
+          _id
           name
         }
       }
       moments {
         data {
+          _id
           timestamp
           description
         }
@@ -591,17 +603,20 @@ export const FindMovieByGuidDocument = `
     _id
     guid
     name
+    shortDescription
     description
     HSL_URL
     DASH_URL
     MP4_URL
     tags {
       data {
+        _id
         name
       }
     }
     moments {
       data {
+        _id
         timestamp
         description
       }
@@ -632,17 +647,20 @@ export const FindMovieByIdDocument = `
     _id
     guid
     name
+    shortDescription
     description
     HSL_URL
     DASH_URL
     MP4_URL
     tags {
       data {
+        _id
         name
       }
     }
     moments {
       data {
+        _id
         timestamp
         description
       }

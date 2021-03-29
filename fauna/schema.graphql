@@ -13,7 +13,7 @@ type Movie {
 
 type Tag {
   name: String! @unique
-  movies: [Movie!]! @relation
+  movies: [Movie!] @relation
 }
 
 type Moment {

@@ -10,17 +10,20 @@ query AllMovies(
             _id
             guid
             name
+            shortDescription
             description
             HSL_URL
             DASH_URL
             MP4_URL
             tags {
                 data {
+                    _id
                     name
                 }
             }
             moments {
                 data {
+                    _id
                     timestamp
                     description
                 }
@@ -51,17 +54,20 @@ query FindMovieByGuid($guid: String!) {
         _id
         guid
         name
+        shortDescription
         description
         HSL_URL
         DASH_URL
         MP4_URL
         tags {
             data {
+                _id
                 name
             }
         }
         moments {
             data {
+                _id
                 timestamp
                 description
             }
@@ -76,17 +82,20 @@ query FindMovieByID($id: ID!) {
         _id
         guid
         name
+        shortDescription
         description
         HSL_URL
         DASH_URL
         MP4_URL
         tags {
             data {
+                _id
                 name
             }
         }
         moments {
             data {
+                _id
                 timestamp
                 description
             }
