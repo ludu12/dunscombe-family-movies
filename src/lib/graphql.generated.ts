@@ -52,12 +52,14 @@ export type Moment = {
   /** The document's ID. */
   _id: Scalars['ID'];
   movie: Movie;
+  hitCount?: Maybe<Scalars['Int']>;
   /** The document's timestamp. */
   _ts: Scalars['Long'];
 };
 
 /** 'Moment' input values */
 export type MomentInput = {
+  hitCount?: Maybe<Scalars['Int']>;
   timestamp?: Maybe<Scalars['String']>;
   movie?: Maybe<MomentMovieRelation>;
   description?: Maybe<Scalars['String']>;
@@ -218,15 +220,23 @@ export type MutationCreateMovieArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  momentsByMovie: QueryMomentsByMoviePage;
   /** Find a document from the collection of 'Moment' by its id. */
   findMomentByID?: Maybe<Moment>;
   /** Find a document from the collection of 'Tag' by its id. */
   findTagByID?: Maybe<Tag>;
+  allMoments: MomentPage;
   allMovies: MoviePage;
   allTags: TagPage;
   findMovieByGuid?: Maybe<Movie>;
   /** Find a document from the collection of 'Movie' by its id. */
   findMovieByID?: Maybe<Movie>;
+};
+
+export type QueryMomentsByMovieArgs = {
+  _size?: Maybe<Scalars['Int']>;
+  _cursor?: Maybe<Scalars['String']>;
+  movieRef: Scalars['String'];
 };
 
 export type QueryFindMomentByIdArgs = {
@@ -235,6 +245,11 @@ export type QueryFindMomentByIdArgs = {
 
 export type QueryFindTagByIdArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryAllMomentsArgs = {
+  _size?: Maybe<Scalars['Int']>;
+  _cursor?: Maybe<Scalars['String']>;
 };
 
 export type QueryAllMoviesArgs = {
@@ -253,6 +268,17 @@ export type QueryFindMovieByGuidArgs = {
 
 export type QueryFindMovieByIdArgs = {
   id: Scalars['ID'];
+};
+
+/** The pagination object for elements of type 'Moment'. */
+export type QueryMomentsByMoviePage = {
+  __typename?: 'QueryMomentsByMoviePage';
+  /** The elements of type 'Moment' in this page. */
+  data: Array<Maybe<Moment>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
 };
 
 export type Tag = {
@@ -331,6 +357,17 @@ export type CreateTagMutation = { __typename?: 'Mutation' } & {
   createTag: { __typename?: 'Tag' } & Pick<Tag, '_ts' | '_id' | 'name'>;
 };
 
+export type CreateMomentMutationVariables = Exact<{
+  data: MomentInput;
+}>;
+
+export type CreateMomentMutation = { __typename?: 'Mutation' } & {
+  createMoment: { __typename?: 'Moment' } & Pick<
+    Moment,
+    '_ts' | '_id' | 'timestamp' | 'description'
+  > & { movie: { __typename?: 'Movie' } & Pick<Movie, '_id'> };
+};
+
 export type AllMoviesQueryVariables = Exact<{
   _size?: Maybe<Scalars['Int']>;
   _cursor?: Maybe<Scalars['String']>;
@@ -359,16 +396,6 @@ export type AllMoviesQuery = { __typename?: 'Query' } & {
               tags: { __typename?: 'TagPage' } & {
                 data: Array<
                   Maybe<{ __typename?: 'Tag' } & Pick<Tag, '_id' | 'name'>>
-                >;
-              };
-              moments: { __typename?: 'MomentPage' } & {
-                data: Array<
-                  Maybe<
-                    { __typename?: 'Moment' } & Pick<
-                      Moment,
-                      '_id' | 'timestamp' | 'description'
-                    >
-                  >
                 >;
               };
             }
@@ -530,6 +557,40 @@ export const useCreateTagMutation = <TError = unknown, TContext = unknown>(
       )(),
     options
   );
+export const CreateMomentDocument = `
+    mutation CreateMoment($data: MomentInput!) {
+  createMoment(data: $data) {
+    _ts
+    _id
+    timestamp
+    movie {
+      _id
+    }
+    description
+  }
+}
+    `;
+export const useCreateMomentMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    CreateMomentMutation,
+    TError,
+    CreateMomentMutationVariables,
+    TContext
+  >
+) =>
+  useMutation<
+    CreateMomentMutation,
+    TError,
+    CreateMomentMutationVariables,
+    TContext
+  >(
+    (variables?: CreateMomentMutationVariables) =>
+      fetcher<CreateMomentMutation, CreateMomentMutationVariables>(
+        CreateMomentDocument,
+        variables
+      )(),
+    options
+  );
 export const AllMoviesDocument = `
     query AllMovies($_size: Int, $_cursor: String) {
   allMovies(_size: $_size, _cursor: $_cursor) {
@@ -549,13 +610,6 @@ export const AllMoviesDocument = `
         data {
           _id
           name
-        }
-      }
-      moments {
-        data {
-          _id
-          timestamp
-          description
         }
       }
       thumbnailUrl

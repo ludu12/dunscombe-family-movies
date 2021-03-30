@@ -17,14 +17,17 @@ type Tag {
 }
 
 type Moment {
+  hitCount: Int
   timestamp: String
   movie: Movie! @relation
   description: String
 }
 
-
 type Query {
   allMovies: [Movie!]!
   allTags: [Tag!]!
+  allMoments: [Moment!]!
   findMovieByGuid(guid: String!): Movie @index(name: "unique_Movie_guid")
+
+  momentsByMovie(movieRef: String!): [Moment!]! @resolver(name: "moments_by_movie", paginated: true)
 }

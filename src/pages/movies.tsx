@@ -9,6 +9,7 @@ import {
   Movie,
 } from '../lib/graphql.generated';
 import { graphqlRequest } from '../lib/rest-utils';
+import { sortByDiscNumber } from '../lib/utils';
 
 const Movies: React.FC<{ movies: Movie[] }> = (props) => {
   const { movies } = props;
@@ -57,9 +58,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      movies: response.data.allMovies.data.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      ),
+      movies: response.data.allMovies.data.sort(sortByDiscNumber),
     },
     revalidate: 1,
   };

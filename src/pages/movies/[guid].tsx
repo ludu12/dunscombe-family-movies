@@ -22,8 +22,8 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
   const [movie, setMovie] = React.useState(props.movie);
   const [isDisabled, setIsDisabled] = React.useState(true);
   const { data, isLoading: isLoadingTags } = useAllTagsQuery();
-  const { mutate, isLoading } = useUpdateMovieMutation();
   const allTags = data?.allTags?.data;
+  const { mutate, isLoading } = useUpdateMovieMutation();
 
   React.useEffect(() => {
     setIsDisabled(isEqual(props.movie, movie));
@@ -176,7 +176,7 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
               </button>
             )}
           </div>
-          <div className="">
+          <div>
             <div>Description:</div>
             <textarea
               className="p-2 w-full border rounded resize-none"

@@ -24,3 +24,15 @@ mutation CreateTag($data:TagInput!) {
         name
     }
 }
+
+mutation CreateMoment($data:MomentInput!) {
+    createMoment(data: $data){
+        _ts
+        _id
+        timestamp
+        movie {
+            _id
+        }
+        description
+    }
+}
