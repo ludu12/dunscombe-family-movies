@@ -1,14 +1,8 @@
 import React from 'react';
-import { GetStaticPaths, GetStaticProps } from 'next';
 import VideoPlayer from '../../components/VideoPlayer';
 import Layout from '../../components/Layout';
-import MovieTag from '../../components/MovieTag';
-import { graphqlRequest } from '../../lib/rest-utils';
+import MovieTag from '../../components/movie/MovieTag';
 import {
-  AllMoviesDocument,
-  AllMoviesQuery,
-  FindMovieByGuidDocument,
-  FindMovieByGuidQuery,
   Movie,
   Tag,
   useAllTagsQuery,
@@ -17,6 +11,10 @@ import {
 import isEqual from 'lodash/isEqual';
 import { PrimaryButton } from '../../components/common/Button';
 import { Spin } from '../../components/common/Animation';
+import {
+  allMoviesStaticPaths,
+  findMovieByGuidStaticProps,
+} from '../../lib/static-props';
 
 const MoviePage: React.FC<{ movie: Movie }> = (props) => {
   const [movie, setMovie] = React.useState(props.movie);
@@ -119,7 +117,7 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
           <div className="flex-1">
             <h2 className="text-2xl">{movie.name}</h2>
             <input
-              className="p-1 w-60"
+              className="p-1 w-80"
               maxLength={50}
               placeholder={'Type a short description...'}
               value={movie.shortDescription || ''}
@@ -134,7 +132,7 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
             Save
           </PrimaryButton>
         </div>
-        <VideoPlayer src={movie.DASH_URL} />
+        <VideoPlayer src={movie.DASH_URL} loading={true} />
         <div className="my-4 flex flex-col shadow-md rounded p-1 border">
           <div className="flex flex-wrap items-center py-2">
             <div>Tags:</div>
@@ -192,38 +190,6 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const request = JSON.stringify({
-    query: AllMoviesDocument,
-  });
-  const response = await graphqlRequest<{
-    data: AllMoviesQuery;
-    errors: { message: string }[];
-  }>(request, process.env.FAUNA_SERVER_KEY);
-
-  const paths = response.data.allMovies.data.map((movie) => ({
-    params: { guid: movie.guid },
-  }));
-
-  return { paths, fallback: false };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const request = JSON.stringify({
-    query: FindMovieByGuidDocument,
-    variables: { guid: params.guid },
-  });
-  const response = await graphqlRequest<{
-    data: FindMovieByGuidQuery;
-    errors: { message: string }[];
-  }>(request, process.env.FAUNA_SERVER_KEY);
-
-  return {
-    props: {
-      movie: response.data.findMovieByGuid,
-    },
-    revalidate: 1,
-  };
-};
-
+export const getStaticPaths = allMoviesStaticPaths;
+export const getStaticProps = findMovieByGuidStaticProps;
 export default MoviePage;

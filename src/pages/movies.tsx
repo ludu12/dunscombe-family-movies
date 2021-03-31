@@ -1,15 +1,9 @@
 import React from 'react';
-import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import Layout from '../components/Layout';
-import MovieTag from '../components/MovieTag';
-import {
-  AllMoviesDocument,
-  AllMoviesQuery,
-  Movie,
-} from '../lib/graphql.generated';
-import { graphqlRequest } from '../lib/rest-utils';
-import { sortByDiscNumber } from '../lib/utils';
+import MovieTag from '../components/movie/MovieTag';
+import { Movie } from '../lib/graphql.generated';
+import { allMoviesStaticProps } from '../lib/static-props';
 
 const Movies: React.FC<{ movies: Movie[] }> = (props) => {
   const { movies } = props;
@@ -32,7 +26,7 @@ const Movies: React.FC<{ movies: Movie[] }> = (props) => {
                     {movie.shortDescription}
                   </div>
                   <div className="flex flex-wrap items-center">
-                    <div>Tags: </div>
+                    <div>Tags:</div>
                     {movie.tags.data.map((t) => (
                       <MovieTag key={t._id} tag={t} />
                     ))}
@@ -47,20 +41,5 @@ const Movies: React.FC<{ movies: Movie[] }> = (props) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  const request = JSON.stringify({
-    query: AllMoviesDocument,
-  });
-  const response = await graphqlRequest<{
-    data: AllMoviesQuery;
-    errors: { message: string }[];
-  }>(request, process.env.FAUNA_SERVER_KEY);
-
-  return {
-    props: {
-      movies: response.data.allMovies.data.sort(sortByDiscNumber),
-    },
-    revalidate: 1,
-  };
-};
+export const getStaticProps = allMoviesStaticProps;
 export default Movies;
