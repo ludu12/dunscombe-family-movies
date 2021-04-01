@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag } from '../lib/graphql.generated';
+import { Tag } from '../../lib/graphql.generated';
 
 function onEnterKeyDown(e) {
   if (!e.repeat && e.key === 'Enter') {

@@ -1,16 +1,14 @@
 import React from 'react';
-import Link from 'next/link';
 import Layout from '../components/Layout';
-import { getSession, Session } from '../lib/auth-cookies';
+import { getSession } from '../lib/auth-cookies';
+import LoginForm from '../components/LoginForm';
 import { GetServerSideProps } from 'next';
 
-const Home: React.FC<{ session: Session }> = () => {
+const Login: React.FC = () => {
   return (
-    <Layout title="Home">
-      <main>
-        <Link href="/movies" as={`/movies`} passHref>
-          <a>Go to movies</a>
-        </Link>
+    <Layout title="Login">
+      <main className="flex flex-col justify-center items-center">
+        <LoginForm />
       </main>
     </Layout>
   );
@@ -19,14 +17,14 @@ const Home: React.FC<{ session: Session }> = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req, res } = context;
   const session = await getSession(req, res);
-  if (!session) {
+  if (session) {
     return {
       redirect: {
-        destination: '/login',
+        destination: '/',
         permanent: false,
       },
     };
   }
-  return { props: { session } };
+  return { props: { session: null } };
 };
-export default Home;
+export default Login;

@@ -44,7 +44,6 @@ async function importSchema(override) {
   try {
     let url =
       'https://graphql.fauna.com/import' + (override ? '?mode=override' : '');
-    console.log(url);
     await axios.post(url, file, {
       headers: {
         Authorization: `Bearer ${process.env.FAUNA_SERVER_KEY}`,
