@@ -11,7 +11,7 @@ import Cookies from 'cookies';
 // const CLOUDFRONT_KEY_PAIR_ID = "CloudFront-Key-Pair-Id";
 const SESSION = 'session';
 
-const MAX_AGE = 60 * 60 * 24 * 7; // 1 week
+const MAX_AGE = 1000 * 60 * 60 * 24 * 7; // 1 week
 
 export interface Session {
   date: number;
