@@ -1,11 +1,19 @@
 import { createHandlers } from '../../lib/rest-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createSession } from '../../lib/auth-cookies';
+import { createSession, validateSession } from '../../lib/auth-cookies';
 
 const handlers = {
   POST: async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    // await createSession(res, { id: user.ref.id, token, email, issuer });
-    res.status(200).send({ done: true });
+    const session = { date: Date.now(), answer: req.body.answer };
+    if (validateSession(session)) {
+      await createSession(req, res, {
+        date: Date.now(),
+        answer: req.body.answer,
+      });
+      res.status(200).send({ done: true });
+    } else {
+      res.status(401).send({ message: 'Incorrect Answer' });
+    }
   },
 };
 

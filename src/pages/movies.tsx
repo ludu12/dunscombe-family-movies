@@ -9,7 +9,7 @@ const Movies: React.FC<{ movies: Movie[] }> = (props) => {
   const { movies } = props;
 
   return (
-    <Layout title="Movies">
+    <Layout title="Movies" redirect>
       <main>
         <div className="flex flex-wrap p-4">
           {movies.map((movie) => (

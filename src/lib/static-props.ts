@@ -1,6 +1,4 @@
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
-import { getSession } from './auth-cookies';
-import { ServerResponse } from 'http';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import {
   AllMoviesDocument,
   AllMoviesQuery,

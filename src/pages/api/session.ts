@@ -5,7 +5,7 @@ export default async function session(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  const session = await getSession(req);
+  const session = await getSession(req, res);
 
   res.status(200).json({ session });
 }

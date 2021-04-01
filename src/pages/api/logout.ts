@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const handlers = {
   GET: async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    removeSession(res);
+    removeSession(req, res);
     res.writeHead(302, { Location: '/' });
     res.end();
   },

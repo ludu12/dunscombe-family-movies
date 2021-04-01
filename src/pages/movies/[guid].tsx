@@ -111,10 +111,10 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
   };
 
   return (
-    <Layout title={movie.name}>
+    <Layout title={movie.name} redirect>
       <main className="m-auto lg:mx-16">
         <div className="flex my-4 justify-between align-top shadow-md rounded p-1 border">
-          <div className="flex-1">
+          <div className="mr-4 overflow-auto">
             <h2 className="text-2xl">{movie.name}</h2>
             <input
               className="p-1 w-80"
@@ -132,7 +132,7 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
             Save
           </PrimaryButton>
         </div>
-        <VideoPlayer src={movie.DASH_URL} loading={true} />
+        <VideoPlayer src={movie.DASH_URL} />
         <div className="my-4 flex flex-col shadow-md rounded p-1 border">
           <div className="flex flex-wrap items-center py-2">
             <div>Tags:</div>
