@@ -27,7 +27,7 @@ export async function createSession(
 ): Promise<void> {
   const encryptedToken = await encrypt(data);
 
-  const cookies = new Cookies(req, res);
+  const cookies = new Cookies(req, res, { secure: true });
   const cookieOptions: Cookies.SetOption = {
     maxAge: MAX_AGE,
     expires: new Date(Date.now() + MAX_AGE * 1000),
@@ -54,7 +54,7 @@ export async function getSession(
   req: IncomingMessage,
   res: ServerResponse
 ): Promise<Session> {
-  const cookies = new Cookies(req, res);
+  const cookies = new Cookies(req, res, { secure: true });
 
   const session = await decrypt(cookies.get(SESSION));
   if (!validateSession(session)) {
@@ -70,7 +70,7 @@ export function validateSession(session: Session): boolean {
 }
 
 export function removeSession(req: IncomingMessage, res: ServerResponse): void {
-  const cookies = new Cookies(req, res);
+  const cookies = new Cookies(req, res, { secure: true });
   const cookieOptions = {
     maxAge: 0,
   };
