@@ -2,8 +2,11 @@ import React from 'react';
 import videojs from 'video.js';
 
 interface VideoPlayerProps {
-  src: string;
-  type?: string;
+  onCaptureTimeStamp?: (ts: number) => void;
+  sources: {
+    src: string;
+    type: string;
+  }[];
 }
 
 const options = {
@@ -15,8 +18,8 @@ const options = {
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
-  src,
-  type = 'application/dash+xml',
+  sources,
+  onCaptureTimeStamp,
 }) => {
   const videoRef = React.useRef(null);
   const [player, setPlayer] = React.useState(null);
@@ -30,9 +33,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   React.useEffect(() => {
     if (player !== null) {
-      player.src({ src, type });
+      player.src(sources);
     }
-  }, [src, type, player]);
+  }, [sources, player]);
+
   return (
     <div data-vjs-player>
       <video ref={videoRef} className="video-js" />

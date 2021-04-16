@@ -11,7 +11,7 @@ const Movies: React.FC<{ movies: Movie[] }> = (props) => {
   return (
     <Layout title="Movies" redirect>
       <main>
-        <div className="flex flex-wrap p-4">
+        <div className={'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}>
           {movies.map((movie) => (
             <Link
               key={movie._id}
@@ -20,15 +20,19 @@ const Movies: React.FC<{ movies: Movie[] }> = (props) => {
               passHref
             >
               <div className="border border-grey-light bg-white rounded p-4 flex justify-between cursor-pointer m-4 flex-1">
-                <div className="flex flex-col justify-between">
-                  <p className="text-sm text-grey-dark">{movie.name}</p>
-                  <div className="text-black font-bold text-xl mb-2">
+                <div className="flex flex-col justify-between overflow-hidden">
+                  <p className="text-sm text-grey-dark overflow-ellipsis whitespace-nowrap overflow-hidden min-w-0">
+                    {movie.name}
+                  </p>
+                  <div className="text-black font-bold text-xl mb-2 overflow-ellipsis whitespace-nowrap overflow-hidden min-w-0">
                     {movie.shortDescription}
                   </div>
                   <div className="flex flex-wrap items-center">
-                    <div>Tags:</div>
+                    <div className="mb-0.5 mr-0.5">Tags:</div>
                     {movie.tags.data.map((t) => (
-                      <MovieTag key={t._id} tag={t} />
+                      <div key={t._id} className="mb-0.5">
+                        <MovieTag tag={t} />
+                      </div>
                     ))}
                   </div>
                 </div>

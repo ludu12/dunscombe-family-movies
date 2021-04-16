@@ -3,7 +3,7 @@ type Movie {
   name: String!
   shortDescription: String,
   description: String
-  HSL_URL: String
+  HLS_URL: String
   DASH_URL: String!
   MP4_URL: String
   thumbnailUrl: String

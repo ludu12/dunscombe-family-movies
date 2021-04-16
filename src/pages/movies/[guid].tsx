@@ -15,6 +15,8 @@ import {
   allMoviesStaticPaths,
   findMovieByGuidStaticProps,
 } from '../../lib/static-props';
+import { useMovieSources } from '../../components/movie/use-movie-sources';
+import { mutationBuilder } from '../../lib/movie-utils';
 
 const MoviePage: React.FC<{ movie: Movie }> = (props) => {
   const [movie, setMovie] = React.useState(props.movie);
@@ -28,31 +30,7 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
   }, [props.movie, movie]);
 
   const handleSubmit = () => {
-    const IDLessTags = movie.tags.data.filter((t) => !t._id);
-    const createTags = IDLessTags.filter(
-      (t) => !allTags.some((x) => x.name === t.name)
-    ).map((t) => ({ name: t.name }));
-    const connectTags = allTags
-      .filter((t) => IDLessTags.some((x) => x.name === t.name))
-      .map((t) => t._id);
-    const deleteTags = props.movie.tags.data
-      .filter((t) => !movie.tags.data.some((x) => x._id === t._id))
-      .map((t) => t._id);
-
-    mutate({
-      id: movie._id,
-      data: {
-        name: movie.name,
-        description: movie.description,
-        shortDescription: movie.shortDescription,
-        DASH_URL: movie.DASH_URL,
-        tags: {
-          create: createTags,
-          connect: connectTags,
-          disconnect: deleteTags,
-        },
-      },
-    });
+    mutate(mutationBuilder(movie, props.movie, allTags));
   };
 
   const handleChange = React.useCallback(
@@ -110,10 +88,11 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
     });
   };
 
+  const sources = useMovieSources(movie);
   return (
     <Layout title={movie.name} redirect>
       <main className="m-auto lg:mx-16">
-        <div className="flex my-4 justify-between align-top shadow-md rounded p-1 border">
+        <div className="flex my-4 justify-between align-top shadow-md rounded px-2 py-1 border">
           <div className="mr-4 overflow-auto">
             <h2 className="text-2xl">{movie.name}</h2>
             <input
@@ -132,8 +111,8 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
             Save
           </PrimaryButton>
         </div>
-        <VideoPlayer src={movie.DASH_URL} />
-        <div className="my-4 flex flex-col shadow-md rounded p-1 border">
+        <VideoPlayer sources={sources} />
+        <div className="my-4 flex flex-col shadow-md rounded px-2 border">
           <div className="flex flex-wrap items-center py-2">
             <div>Tags:</div>
             {movie.tags.data.map((t, i) => (
@@ -177,8 +156,8 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
           <div>
             <div>Description:</div>
             <textarea
-              className="p-2 w-full border rounded resize-none"
-              maxLength={200}
+              className="p-2 w-full border rounded"
+              maxLength={300}
               placeholder={'Any other details?...'}
               value={movie.description || ''}
               onChange={handleChange('description')}

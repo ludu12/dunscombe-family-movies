@@ -11,18 +11,16 @@ export interface AuthProps {
 export const AuthProvider: React.FC<AuthProps> = ({ redirect, children }) => {
   const router = useRouter();
 
-  const { data: session } = useQuery('session', async () => {
+  const { data: session, isLoading } = useQuery('session', async () => {
     const res = await axios.get('session');
     return res.data.session;
   });
 
   React.useEffect(() => {
-    axios.get('session').then((r) => {
-      if (!session && redirect) {
-        router.push('/login');
-      }
-    });
-  }, [session]);
+    if (!isLoading && !session && redirect) {
+      router.push('/login');
+    }
+  }, [isLoading, session]);
 
   const login = async (answer): Promise<void> => {
     try {
@@ -41,7 +39,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ redirect, children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ session, login, logout }}>
+    <AuthContext.Provider value={{ isLoading, session, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

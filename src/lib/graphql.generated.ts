@@ -86,6 +86,7 @@ export type MomentPage = {
 
 export type Movie = {
   __typename?: 'Movie';
+  HLS_URL?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   guid?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -95,7 +96,6 @@ export type Movie = {
   shortDescription?: Maybe<Scalars['String']>;
   moments: MomentPage;
   MP4_URL?: Maybe<Scalars['String']>;
-  HSL_URL?: Maybe<Scalars['String']>;
   thumbnailUrl?: Maybe<Scalars['String']>;
   DASH_URL: Scalars['String'];
   /** The document's timestamp. */
@@ -118,7 +118,7 @@ export type MovieInput = {
   name: Scalars['String'];
   shortDescription?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  HSL_URL?: Maybe<Scalars['String']>;
+  HLS_URL?: Maybe<Scalars['String']>;
   DASH_URL: Scalars['String'];
   MP4_URL?: Maybe<Scalars['String']>;
   thumbnailUrl?: Maybe<Scalars['String']>;
@@ -337,7 +337,7 @@ export type UpdateMovieMutation = { __typename?: 'Mutation' } & {
       | 'guid'
       | 'name'
       | 'description'
-      | 'HSL_URL'
+      | 'HLS_URL'
       | 'DASH_URL'
       | 'MP4_URL'
       | 'thumbnailUrl'
@@ -388,7 +388,7 @@ export type AllMoviesQuery = { __typename?: 'Query' } & {
             | 'name'
             | 'shortDescription'
             | 'description'
-            | 'HSL_URL'
+            | 'HLS_URL'
             | 'DASH_URL'
             | 'MP4_URL'
             | 'thumbnailUrl'
@@ -429,7 +429,7 @@ export type FindMovieByGuidQuery = { __typename?: 'Query' } & {
       | 'name'
       | 'shortDescription'
       | 'description'
-      | 'HSL_URL'
+      | 'HLS_URL'
       | 'DASH_URL'
       | 'MP4_URL'
       | 'thumbnailUrl'
@@ -467,7 +467,7 @@ export type FindMovieByIdQuery = { __typename?: 'Query' } & {
       | 'name'
       | 'shortDescription'
       | 'description'
-      | 'HSL_URL'
+      | 'HLS_URL'
       | 'DASH_URL'
       | 'MP4_URL'
       | 'thumbnailUrl'
@@ -499,7 +499,7 @@ export const UpdateMovieDocument = `
     guid
     name
     description
-    HSL_URL
+    HLS_URL
     DASH_URL
     MP4_URL
     tags {
@@ -603,7 +603,7 @@ export const AllMoviesDocument = `
       name
       shortDescription
       description
-      HSL_URL
+      HLS_URL
       DASH_URL
       MP4_URL
       tags {
@@ -659,7 +659,7 @@ export const FindMovieByGuidDocument = `
     name
     shortDescription
     description
-    HSL_URL
+    HLS_URL
     DASH_URL
     MP4_URL
     tags {
@@ -703,7 +703,7 @@ export const FindMovieByIdDocument = `
     name
     shortDescription
     description
-    HSL_URL
+    HLS_URL
     DASH_URL
     MP4_URL
     tags {
