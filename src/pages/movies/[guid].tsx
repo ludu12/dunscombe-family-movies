@@ -1,8 +1,8 @@
 import React from 'react';
 import VideoPlayer from '../../components/VideoPlayer';
 import Layout from '../../components/Layout';
-import MovieTag from '../../components/movie/MovieTag';
 import {
+  Moment,
   Movie,
   Tag,
   useAllTagsQuery,
@@ -10,19 +10,21 @@ import {
 } from '../../lib/graphql.generated';
 import isEqual from 'lodash/isEqual';
 import { PrimaryButton } from '../../components/common/Button';
-import { Spin } from '../../components/common/Animation';
 import {
   allMoviesStaticPaths,
   findMovieByGuidStaticProps,
 } from '../../lib/static-props';
 import { useMovieSources } from '../../components/movie/use-movie-sources';
-import { mutationBuilder } from '../../lib/movie-utils';
+import { mutationBuilder } from '../../lib/movie/movie-utils';
+import MomentManagement from '../../components/movie/MomentMangament';
+import TagManagement from '../../components/movie/TagManagement';
 
 const MoviePage: React.FC<{ movie: Movie }> = (props) => {
   const [movie, setMovie] = React.useState(props.movie);
   const [isDisabled, setIsDisabled] = React.useState(true);
-  const { data, isLoading: isLoadingTags } = useAllTagsQuery();
+  const { data } = useAllTagsQuery();
   const allTags = data?.allTags?.data;
+  const [player, setPlayer] = React.useState(null);
   const { mutate, isLoading } = useUpdateMovieMutation();
 
   React.useEffect(() => {
@@ -43,52 +45,33 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
     []
   );
 
-  const handleTagDelete = React.useCallback(
-    (index) => () => {
-      setMovie((m) => ({
-        ...m,
-        tags: {
-          ...m.tags,
-          data: m.tags.data.filter((t, i) => i !== index),
-        },
-      }));
-    },
-    []
-  );
+  const sources = useMovieSources(movie);
+  React.useEffect(() => {
+    if (player !== null) {
+      player.src(sources);
+    }
+  }, [player, sources]);
 
-  const handleTagAdd = React.useCallback(() => {
-    const newTag = ({ name: '' } as unknown) as Tag;
+  const handleTagUpdate = (tags: Tag[]) => {
     setMovie((m) => ({
       ...m,
       tags: {
         ...m.tags,
-        data: m.tags.data.concat(newTag),
+        data: tags,
       },
     }));
-  }, []);
-
-  const handleTagUpdate = (index) => (name: string) => {
-    const newData = movie.tags.data
-      .map((t, i) => {
-        if (i === index) {
-          if (name === '' || movie.tags.data.some((t) => t.name === name)) {
-            return null;
-          }
-          return ({ name } as unknown) as Tag;
-        }
-        return t;
-      })
-      .filter(Boolean);
-    setMovie({
-      ...movie,
-      tags: {
-        ...movie.tags,
-        data: newData,
-      },
-    });
   };
 
-  const sources = useMovieSources(movie);
+  const handleMomentUpdate = (moments: Moment[]) => {
+    setMovie((m) => ({
+      ...m,
+      moments: {
+        ...m.moments,
+        data: moments,
+      },
+    }));
+  };
+
   return (
     <Layout title={movie.name} redirect>
       <main className="m-auto lg:mx-16">
@@ -111,57 +94,21 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
             Save
           </PrimaryButton>
         </div>
-        <VideoPlayer sources={sources} />
+        <VideoPlayer setPlayer={setPlayer} />
         <div className="my-4 flex flex-col shadow-md rounded px-2 border">
-          <div className="flex flex-wrap items-center py-2">
-            <div>Tags:</div>
-            {movie.tags.data.map((t, i) => (
-              <MovieTag
-                key={i}
-                tag={t}
-                onDelete={handleTagDelete(i)}
-                onUpdate={handleTagUpdate(i)}
-              />
-            ))}
-            {isLoadingTags ? (
-              <Spin isSpinning={isLoadingTags} />
-            ) : (
-              <button
-                title={'Add tag'}
-                onClick={handleTagAdd}
-                className="box-border bg-grey-light font-medium hover:bg-grey text-gray-700 bg-gray-100 border border-gray-300 font-bold rounded-full inline-flex items-center w-5 h-5 ml-1"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="100%"
-                  height="100%"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-x hover:text-gray-400 rounded-full"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-              </button>
-            )}
-          </div>
+          <TagManagement tags={movie.tags.data} updateTags={handleTagUpdate} />
           <div>
             <div>Description:</div>
             <textarea
-              className="p-2 w-full border rounded"
+              className="p-2 w-full border rounded min-h-96"
               maxLength={300}
               placeholder={'Any other details?...'}
               value={movie.description || ''}
               onChange={handleChange('description')}
             />
+          </div>
+          <div className="pb-8">
+            <MomentManagement movie={movie} player={player} />
           </div>
         </div>
       </main>

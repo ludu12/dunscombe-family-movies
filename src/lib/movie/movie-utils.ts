@@ -3,7 +3,7 @@ import {
   Movie,
   Tag,
   UpdateMovieMutationVariables,
-} from './graphql.generated';
+} from '../graphql.generated';
 
 export function mutationBuilder(
   newMovie: Movie,
