@@ -40,29 +40,9 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  Time: any;
   /** The `Long` scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
   Long: any;
-  Time: any;
-};
-
-export type Moment = {
-  __typename?: 'Moment';
-  timestamp?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  /** The document's ID. */
-  _id: Scalars['ID'];
-  movie: Movie;
-  hitCount?: Maybe<Scalars['Int']>;
-  /** The document's timestamp. */
-  _ts: Scalars['Long'];
-};
-
-/** 'Moment' input values */
-export type MomentInput = {
-  hitCount?: Maybe<Scalars['Int']>;
-  timestamp?: Maybe<Scalars['String']>;
-  movie?: Maybe<MomentMovieRelation>;
-  description?: Maybe<Scalars['String']>;
 };
 
 /** Allow manipulating the relationship between the types 'Moment' and 'Movie' using the field 'Moment.movie'. */
@@ -71,45 +51,6 @@ export type MomentMovieRelation = {
   create?: Maybe<MovieInput>;
   /** Connect a document of type 'Movie' with the current document using its ID. */
   connect?: Maybe<Scalars['ID']>;
-};
-
-/** The pagination object for elements of type 'Moment'. */
-export type MomentPage = {
-  __typename?: 'MomentPage';
-  /** The elements of type 'Moment' in this page. */
-  data: Array<Maybe<Moment>>;
-  /** A cursor for elements coming after the current page. */
-  after?: Maybe<Scalars['String']>;
-  /** A cursor for elements coming before the current page. */
-  before?: Maybe<Scalars['String']>;
-};
-
-export type Movie = {
-  __typename?: 'Movie';
-  HLS_URL?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  guid?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  /** The document's ID. */
-  _id: Scalars['ID'];
-  tags: TagPage;
-  shortDescription?: Maybe<Scalars['String']>;
-  moments: MomentPage;
-  MP4_URL?: Maybe<Scalars['String']>;
-  thumbnailUrl?: Maybe<Scalars['String']>;
-  DASH_URL: Scalars['String'];
-  /** The document's timestamp. */
-  _ts: Scalars['Long'];
-};
-
-export type MovieTagsArgs = {
-  _size?: Maybe<Scalars['Int']>;
-  _cursor?: Maybe<Scalars['String']>;
-};
-
-export type MovieMomentsArgs = {
-  _size?: Maybe<Scalars['Int']>;
-  _cursor?: Maybe<Scalars['String']>;
 };
 
 /** 'Movie' input values */
@@ -134,17 +75,6 @@ export type MovieMomentsRelation = {
   connect?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** Disconnect the given documents of type 'Moment' from the current document using their IDs. */
   disconnect?: Maybe<Array<Maybe<Scalars['ID']>>>;
-};
-
-/** The pagination object for elements of type 'Movie'. */
-export type MoviePage = {
-  __typename?: 'MoviePage';
-  /** The elements of type 'Movie' in this page. */
-  data: Array<Maybe<Movie>>;
-  /** A cursor for elements coming after the current page. */
-  after?: Maybe<Scalars['String']>;
-  /** A cursor for elements coming before the current page. */
-  before?: Maybe<Scalars['String']>;
 };
 
 /** Allow manipulating the relationship between the types 'Movie' and 'Tag'. */
@@ -216,6 +146,81 @@ export type MutationDeleteMovieArgs = {
 
 export type MutationCreateMovieArgs = {
   data: MovieInput;
+};
+
+/** 'Tag' input values */
+export type TagInput = {
+  name: Scalars['String'];
+  movies?: Maybe<TagMoviesRelation>;
+};
+
+/** Allow manipulating the relationship between the types 'Tag' and 'Movie'. */
+export type TagMoviesRelation = {
+  /** Create one or more documents of type 'Movie' and associate them with the current document. */
+  create?: Maybe<Array<Maybe<MovieInput>>>;
+  /** Connect one or more documents of type 'Movie' with the current document using their IDs. */
+  connect?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'Movie' from the current document using their IDs. */
+  disconnect?: Maybe<Array<Maybe<Scalars['ID']>>>;
+};
+
+export type Moment = {
+  __typename?: 'Moment';
+  timestamp?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  movie: Movie;
+  hitCount?: Maybe<Scalars['Int']>;
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+};
+
+/** The pagination object for elements of type 'Moment'. */
+export type MomentPage = {
+  __typename?: 'MomentPage';
+  /** The elements of type 'Moment' in this page. */
+  data: Array<Maybe<Moment>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+export type Movie = {
+  __typename?: 'Movie';
+  HLS_URL?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  guid?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  tags: TagPage;
+  shortDescription?: Maybe<Scalars['String']>;
+  moments: MomentPage;
+  MP4_URL?: Maybe<Scalars['String']>;
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  DASH_URL: Scalars['String'];
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+};
+
+export type MovieTagsArgs = {
+  _size?: Maybe<Scalars['Int']>;
+  _cursor?: Maybe<Scalars['String']>;
+};
+
+export type MovieMomentsArgs = {
+  _size?: Maybe<Scalars['Int']>;
+  _cursor?: Maybe<Scalars['String']>;
+};
+
+/** 'Moment' input values */
+export type MomentInput = {
+  hitCount?: Maybe<Scalars['Int']>;
+  timestamp?: Maybe<Scalars['String']>;
+  movie?: Maybe<MomentMovieRelation>;
+  description?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -296,27 +301,22 @@ export type TagMoviesArgs = {
   _cursor?: Maybe<Scalars['String']>;
 };
 
-/** 'Tag' input values */
-export type TagInput = {
-  name: Scalars['String'];
-  movies?: Maybe<TagMoviesRelation>;
-};
-
-/** Allow manipulating the relationship between the types 'Tag' and 'Movie'. */
-export type TagMoviesRelation = {
-  /** Create one or more documents of type 'Movie' and associate them with the current document. */
-  create?: Maybe<Array<Maybe<MovieInput>>>;
-  /** Connect one or more documents of type 'Movie' with the current document using their IDs. */
-  connect?: Maybe<Array<Maybe<Scalars['ID']>>>;
-  /** Disconnect the given documents of type 'Movie' from the current document using their IDs. */
-  disconnect?: Maybe<Array<Maybe<Scalars['ID']>>>;
-};
-
 /** The pagination object for elements of type 'Tag'. */
 export type TagPage = {
   __typename?: 'TagPage';
   /** The elements of type 'Tag' in this page. */
   data: Array<Maybe<Tag>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+/** The pagination object for elements of type 'Movie'. */
+export type MoviePage = {
+  __typename?: 'MoviePage';
+  /** The elements of type 'Movie' in this page. */
+  data: Array<Maybe<Movie>>;
   /** A cursor for elements coming after the current page. */
   after?: Maybe<Scalars['String']>;
   /** A cursor for elements coming before the current page. */
@@ -350,7 +350,7 @@ export type UpdateMovieMutation = { __typename?: 'Mutation' } & {
             Maybe<
               { __typename?: 'Moment' } & Pick<
                 Moment,
-                'timestamp' | 'description'
+                'hitCount' | 'timestamp' | 'description'
               >
             >
           >;
@@ -374,7 +374,7 @@ export type CreateMomentMutationVariables = Exact<{
 export type CreateMomentMutation = { __typename?: 'Mutation' } & {
   createMoment: { __typename?: 'Moment' } & Pick<
     Moment,
-    '_ts' | '_id' | 'timestamp' | 'description'
+    '_ts' | '_id' | 'hitCount' | 'timestamp' | 'description'
   > & { movie: { __typename?: 'Movie' } & Pick<Movie, '_id'> };
 };
 
@@ -387,7 +387,7 @@ export type UpdateMomentMutation = { __typename?: 'Mutation' } & {
   updateMoment?: Maybe<
     { __typename?: 'Moment' } & Pick<
       Moment,
-      '_ts' | '_id' | 'timestamp' | 'description'
+      '_ts' | '_id' | 'hitCount' | 'timestamp' | 'description'
     > & { movie: { __typename?: 'Movie' } & Pick<Movie, '_id'> }
   >;
 };
@@ -476,7 +476,7 @@ export type FindMovieByGuidQuery = { __typename?: 'Query' } & {
             Maybe<
               { __typename?: 'Moment' } & Pick<
                 Moment,
-                '_id' | 'timestamp' | 'description'
+                '_id' | 'hitCount' | 'timestamp' | 'description'
               >
             >
           >;
@@ -514,7 +514,7 @@ export type FindMovieByIdQuery = { __typename?: 'Query' } & {
             Maybe<
               { __typename?: 'Moment' } & Pick<
                 Moment,
-                '_id' | 'timestamp' | 'description'
+                '_id' | 'hitCount' | 'timestamp' | 'description'
               >
             >
           >;
@@ -538,7 +538,7 @@ export type MomentsByMovieQuery = { __typename?: 'Query' } & {
         Maybe<
           { __typename?: 'Moment' } & Pick<
             Moment,
-            '_id' | 'timestamp' | 'description'
+            '_id' | 'hitCount' | 'timestamp' | 'description'
           >
         >
       >;
@@ -563,6 +563,7 @@ export const UpdateMovieDocument = `
     }
     moments {
       data {
+        hitCount
         timestamp
         description
       }
@@ -622,6 +623,7 @@ export const CreateMomentDocument = `
   createMoment(data: $data) {
     _ts
     _id
+    hitCount
     timestamp
     movie {
       _id
@@ -656,6 +658,7 @@ export const UpdateMomentDocument = `
   updateMoment(id: $id, data: $data) {
     _ts
     _id
+    hitCount
     timestamp
     movie {
       _id
@@ -793,6 +796,7 @@ export const FindMovieByGuidDocument = `
     moments {
       data {
         _id
+        hitCount
         timestamp
         description
       }
@@ -837,6 +841,7 @@ export const FindMovieByIdDocument = `
     moments {
       data {
         _id
+        hitCount
         timestamp
         description
       }
@@ -867,6 +872,7 @@ export const MomentsByMovieDocument = `
     before
     data {
       _id
+      hitCount
       timestamp
       description
     }

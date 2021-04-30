@@ -15,6 +15,7 @@ mutation UpdateMovie($id: ID!, $data:MovieInput!) {
         }
         moments {
             data {
+                hitCount
                 timestamp
                 description
             }
@@ -35,6 +36,7 @@ mutation CreateMoment($data:MomentInput!) {
     createMoment(data: $data){
         _ts
         _id
+        hitCount
         timestamp
         movie {
             _id
@@ -47,6 +49,7 @@ mutation UpdateMoment($id: ID!, $data:MomentInput!) {
     updateMoment(id: $id, data: $data){
         _ts
         _id
+        hitCount
         timestamp
         movie {
             _id

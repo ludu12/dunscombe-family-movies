@@ -61,6 +61,7 @@ query FindMovieByGuid($guid: String!) {
         moments {
             data {
                 _id
+                hitCount
                 timestamp
                 description
             }
@@ -89,6 +90,7 @@ query FindMovieByID($id: ID!) {
         moments {
             data {
                 _id
+                hitCount
                 timestamp
                 description
             }
@@ -105,6 +107,7 @@ query MomentsByMovie($movieRef: String!,
         before
         data {
             _id
+            hitCount
             timestamp
             description
         }

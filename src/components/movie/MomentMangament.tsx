@@ -5,6 +5,7 @@ import {
   useCreateMomentMutation,
   useDeleteMomentMutation,
   useMomentsByMovieQuery,
+  useUpdateMomentMutation,
 } from '../../lib/graphql.generated';
 import MovieMoment from './MovieMoment';
 import { VideoJsPlayer } from 'video.js';
@@ -26,12 +27,18 @@ const MomentManagement: React.FC<{
     movieRef: movie._id,
     _size: 20,
   });
+
   const moments = data?.momentsByMovie?.data;
 
   const {
     mutate: createMoment,
     isLoading: isCreating,
   } = useCreateMomentMutation({
+    onSuccess: async () => {
+      await refetch();
+    },
+  });
+  const { mutate: updateMoment } = useUpdateMomentMutation({
     onSuccess: async () => {
       await refetch();
     },
@@ -49,12 +56,19 @@ const MomentManagement: React.FC<{
     deleteMoment({ id });
   };
 
+  const handleMomentClick = (moment: Moment) => () => {
+    const hitCount = moment.hitCount || 0;
+    updateMoment({ id: moment._id, data: { hitCount: hitCount + 1 } });
+    player.currentTime(Number(moment.timestamp));
+  };
+
   const handleMomentAdd = () => {
     setModalOpen(false);
     setDescription('');
     setTimestamp(0);
     createMoment({
       data: {
+        hitCount: 0,
         timestamp: `${timestamp}`,
         description,
         movie: { connect: movie._id },
@@ -100,10 +114,9 @@ const MomentManagement: React.FC<{
           <MovieMoment
             key={i}
             moment={moment}
-            onDelete={handleMomentDelete(m._id)}
-            onClick={() => {
-              player.currentTime(Number(m.timestamp));
-            }}
+            // TODO: Implement this maybe with admin privileges?
+            // onDelete={handleMomentDelete(moment._id)}
+            onClick={handleMomentClick(moment)}
           />
         );
       })}
