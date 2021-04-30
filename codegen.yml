@@ -14,5 +14,6 @@ generates:
       - "typescript-operations"
       - "typescript-react-query"
     config:
+      exposeQueryKeys: true
       fetcher:
         endpoint: 'endpointUrl'

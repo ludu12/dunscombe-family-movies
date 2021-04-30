@@ -1,50 +1,47 @@
 import React from 'react';
-import { Movie, Tag, useAllTagsQuery } from '../../lib/graphql.generated';
+import { Tag } from '../../lib/graphql.generated';
 import MovieTag from './MovieTag';
 import { Spin } from '../common/Animation';
+import { useAllTags } from './use-all-tags';
 
 const TagManagement: React.FC<{
   tags: Tag[];
   updateTags: (tags: Tag[]) => void;
 }> = (props) => {
   const { tags, updateTags } = props;
-  const { isLoading: isLoadingTags } = useAllTagsQuery();
+  const { isLoading: isLoadingTags } = useAllTags();
+  const [newTag, setNewTag] = React.useState(null);
 
   const handleTagDelete = (index) => () => {
     updateTags(tags.filter((t, i) => i !== index));
   };
 
   const handleTagAdd = () => {
-    const newTag = ({ name: '' } as unknown) as Tag;
-    updateTags(tags.concat(newTag));
+    const tag = ({ name: '' } as unknown) as Tag;
+    setNewTag(tag);
   };
 
-  const handleTagUpdate = (index) => (name: string) => {
-    const newData = tags
-      .map((t, i) => {
-        if (i === index) {
-          if (name === '' || tags.some((t) => t.name === name)) {
-            return null;
-          }
-          return ({ name } as unknown) as Tag;
-        }
-        return t;
-      })
-      .filter(Boolean);
-    updateTags(newData);
+  const handleTagUpdate = (name: string) => {
+    if (name) {
+      const tag = ({ name } as unknown) as Tag;
+      updateTags(tags.concat(tag));
+    }
+    setNewTag(null);
   };
 
   return (
     <div className="flex flex-wrap items-center py-2">
       <div>Tags:</div>
       {tags.map((t, i) => (
-        <MovieTag
-          key={i}
-          tag={t}
-          onDelete={handleTagDelete(i)}
-          onUpdate={handleTagUpdate(i)}
-        />
+        <MovieTag key={i} tag={t} onDelete={handleTagDelete(i)} />
       ))}
+      {newTag && (
+        <MovieTag
+          tag={newTag}
+          onDelete={() => setNewTag(null)}
+          onUpdate={handleTagUpdate}
+        />
+      )}
       {isLoadingTags ? (
         <Spin isSpinning={isLoadingTags} />
       ) : (

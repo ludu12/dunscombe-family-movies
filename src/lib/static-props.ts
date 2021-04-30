@@ -37,7 +37,7 @@ export const allMoviesStaticProps: GetStaticProps = async () => {
     props: {
       movies: response.data.allMovies.data.sort(sortByDiscNumber),
     },
-    revalidate: 1,
+    revalidate: 60,
   };
 };
 
@@ -57,6 +57,6 @@ export const findMovieByGuidStaticProps: GetStaticProps = async ({
     props: {
       movie: response.data.findMovieByGuid,
     },
-    revalidate: 1,
+    revalidate: 60,
   };
 };

@@ -22,7 +22,7 @@ const MovieTag: React.FC<{
   const inputEl = React.useRef(null);
 
   React.useEffect(() => {
-    if (inputEl.current) {
+    if (inputEl.current && onUpdate) {
       inputEl.current.addEventListener('keydown', onEnterKeyDown);
       inputEl.current.addEventListener('focusout', onFocusOut(onUpdate));
     }

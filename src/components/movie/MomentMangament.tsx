@@ -23,34 +23,34 @@ const MomentManagement: React.FC<{
   const [timestamp, setTimestamp] = React.useState(0);
   const [description, setDescription] = React.useState('');
   const [isModalOpen, setModalOpen] = React.useState(false);
-  const { data, refetch, isLoading } = useMomentsByMovieQuery({
-    movieRef: movie._id,
-    _size: 20,
-  });
+  const { data, refetch, isLoading } = useMomentsByMovieQuery(
+    {
+      movieRef: movie._id,
+      _size: 30,
+    },
+    { staleTime: 60 * 1000 }
+  );
 
   const moments = data?.momentsByMovie?.data;
+
+  const mutationOptions = React.useMemo(
+    () => ({
+      onSuccess: async () => {
+        await refetch();
+      },
+    }),
+    [refetch]
+  );
 
   const {
     mutate: createMoment,
     isLoading: isCreating,
-  } = useCreateMomentMutation({
-    onSuccess: async () => {
-      await refetch();
-    },
-  });
-  const { mutate: updateMoment } = useUpdateMomentMutation({
-    onSuccess: async () => {
-      await refetch();
-    },
-  });
+  } = useCreateMomentMutation(mutationOptions);
+  const { mutate: updateMoment } = useUpdateMomentMutation(mutationOptions);
   const {
     mutate: deleteMoment,
     isLoading: isDeleting,
-  } = useDeleteMomentMutation({
-    onSuccess: async () => {
-      await refetch();
-    },
-  });
+  } = useDeleteMomentMutation(mutationOptions);
 
   const handleMomentDelete = (id: string) => () => {
     deleteMoment({ id });
@@ -115,13 +115,17 @@ const MomentManagement: React.FC<{
             key={i}
             moment={moment}
             // TODO: Implement this maybe with admin privileges?
-            // onDelete={handleMomentDelete(moment._id)}
+            onDelete={handleMomentDelete(moment._id)}
             onClick={handleMomentClick(moment)}
           />
         );
       })}
       <Spin isSpinning={isCreating || isDeleting || isLoading} />
-      <div className={'fixed bottom-0 right-0 m-4 flex-col flex'}>
+      <div
+        className={
+          'transition-colors cursor-pointer fixed bottom-0 right-0 m-4 flex-col flex bg-gray-200 rounded-full p-2 hover:bg-gray-100 hover:text-gray-800'
+        }
+      >
         <button
           className="relative cursor-pointer self-end has-tooltip"
           onClick={handleMomentCapture}
@@ -134,7 +138,7 @@ const MomentManagement: React.FC<{
           >
             <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
           </svg>
-          <div className="tooltip -top-0 -left-40 w-48 py-1 px-2">
+          <div className="tooltip -top-0 -left-40 w-48 py-1 px-2 text-black">
             Capture Moment!
           </div>
         </button>

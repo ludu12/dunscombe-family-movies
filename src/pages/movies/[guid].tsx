@@ -1,76 +1,33 @@
 import React from 'react';
 import VideoPlayer from '../../components/VideoPlayer';
 import Layout from '../../components/Layout';
-import {
-  Moment,
-  Movie,
-  Tag,
-  useAllTagsQuery,
-  useUpdateMovieMutation,
-} from '../../lib/graphql.generated';
-import isEqual from 'lodash/isEqual';
-import { PrimaryButton } from '../../components/common/Button';
+import { Movie } from '../../lib/graphql.generated';
 import {
   allMoviesStaticPaths,
   findMovieByGuidStaticProps,
 } from '../../lib/static-props';
 import { useMovieSources } from '../../components/movie/use-movie-sources';
-import { mutationBuilder } from '../../lib/movie/movie-utils';
 import MomentManagement from '../../components/movie/MomentMangament';
 import TagManagement from '../../components/movie/TagManagement';
+import { useMovieByGuid } from '../../components/movie/use-movie-by-guid';
+import { Spin } from '../../components/common/Animation';
 
 const MoviePage: React.FC<{ movie: Movie }> = (props) => {
-  const [movie, setMovie] = React.useState(props.movie);
-  const [isDisabled, setIsDisabled] = React.useState(true);
-  const { data } = useAllTagsQuery();
-  const allTags = data?.allTags?.data;
+  const {
+    isMutating,
+    movie,
+    handleChange,
+    handleTagMutation,
+    triggerMutation,
+  } = useMovieByGuid(props.movie.guid, props.movie);
   const [player, setPlayer] = React.useState(null);
-  const { mutate, isLoading } = useUpdateMovieMutation();
-
-  React.useEffect(() => {
-    setIsDisabled(isEqual(props.movie, movie));
-  }, [props.movie, movie]);
-
-  const handleSubmit = () => {
-    mutate(mutationBuilder(movie, props.movie, allTags));
-  };
-
-  const handleChange = React.useCallback(
-    (field) => (event) => {
-      setMovie((m) => ({
-        ...m,
-        [field]: event.target.value,
-      }));
-    },
-    []
-  );
-
   const sources = useMovieSources(movie);
+
   React.useEffect(() => {
     if (player !== null) {
       player.src(sources);
     }
   }, [player, sources]);
-
-  const handleTagUpdate = (tags: Tag[]) => {
-    setMovie((m) => ({
-      ...m,
-      tags: {
-        ...m.tags,
-        data: tags,
-      },
-    }));
-  };
-
-  const handleMomentUpdate = (moments: Moment[]) => {
-    setMovie((m) => ({
-      ...m,
-      moments: {
-        ...m.moments,
-        data: moments,
-      },
-    }));
-  };
 
   return (
     <Layout title={movie.name} redirect>
@@ -83,20 +40,23 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
               maxLength={50}
               placeholder={'Type a short description...'}
               value={movie.shortDescription || ''}
+              onBlur={triggerMutation}
               onChange={handleChange('shortDescription')}
             />
           </div>
-          <PrimaryButton
-            disabled={isDisabled || isLoading}
-            isLoading={isLoading}
-            onClick={handleSubmit}
-          >
-            Save
-          </PrimaryButton>
+          {isMutating && (
+            <div className={'flex items-center'}>
+              <Spin isSpinning={isMutating} />
+              <div>Saving...</div>
+            </div>
+          )}
         </div>
         <VideoPlayer setPlayer={setPlayer} />
         <div className="my-4 flex flex-col shadow-md rounded px-2 border">
-          <TagManagement tags={movie.tags.data} updateTags={handleTagUpdate} />
+          <TagManagement
+            tags={movie.tags.data}
+            updateTags={handleTagMutation}
+          />
           <div>
             <div>Description:</div>
             <textarea
@@ -105,6 +65,7 @@ const MoviePage: React.FC<{ movie: Movie }> = (props) => {
               placeholder={'Any other details?...'}
               value={movie.description || ''}
               onChange={handleChange('description')}
+              onBlur={triggerMutation}
             />
           </div>
           <div className="pb-8">

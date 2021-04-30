@@ -58,14 +58,6 @@ query FindMovieByGuid($guid: String!) {
                 name
             }
         }
-        moments {
-            data {
-                _id
-                hitCount
-                timestamp
-                description
-            }
-        }
         thumbnailUrl
     }
 }
@@ -85,14 +77,6 @@ query FindMovieByID($id: ID!) {
             data {
                 _id
                 name
-            }
-        }
-        moments {
-            data {
-                _id
-                hitCount
-                timestamp
-                description
             }
         }
         thumbnailUrl

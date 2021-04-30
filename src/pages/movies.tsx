@@ -4,9 +4,12 @@ import Layout from '../components/Layout';
 import MovieTag from '../components/movie/MovieTag';
 import { Movie } from '../lib/graphql.generated';
 import { allMoviesStaticProps } from '../lib/static-props';
+import { useAllMovies } from '../components/movie/use-all-movies';
+import { sortByDiscNumber } from '../lib/utils';
 
 const Movies: React.FC<{ movies: Movie[] }> = (props) => {
-  const { movies } = props;
+  const { data } = useAllMovies(props.movies);
+  const movies = data.allMovies.data.sort(sortByDiscNumber);
 
   return (
     <Layout title="Movies" redirect>
