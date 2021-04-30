@@ -345,6 +345,16 @@ export type UpdateMovieMutation = { __typename?: 'Mutation' } & {
         tags: { __typename?: 'TagPage' } & {
           data: Array<Maybe<{ __typename?: 'Tag' } & Pick<Tag, 'name'>>>;
         };
+        moments: { __typename?: 'MomentPage' } & {
+          data: Array<
+            Maybe<
+              { __typename?: 'Moment' } & Pick<
+                Moment,
+                'timestamp' | 'description'
+              >
+            >
+          >;
+        };
       }
   >;
 };
@@ -366,6 +376,28 @@ export type CreateMomentMutation = { __typename?: 'Mutation' } & {
     Moment,
     '_ts' | '_id' | 'timestamp' | 'description'
   > & { movie: { __typename?: 'Movie' } & Pick<Movie, '_id'> };
+};
+
+export type UpdateMomentMutationVariables = Exact<{
+  id: Scalars['ID'];
+  data: MomentInput;
+}>;
+
+export type UpdateMomentMutation = { __typename?: 'Mutation' } & {
+  updateMoment?: Maybe<
+    { __typename?: 'Moment' } & Pick<
+      Moment,
+      '_ts' | '_id' | 'timestamp' | 'description'
+    > & { movie: { __typename?: 'Movie' } & Pick<Movie, '_id'> }
+  >;
+};
+
+export type DeleteMomentMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type DeleteMomentMutation = { __typename?: 'Mutation' } & {
+  deleteMoment?: Maybe<{ __typename?: 'Moment' } & Pick<Moment, '_id'>>;
 };
 
 export type AllMoviesQueryVariables = Exact<{
@@ -491,6 +523,28 @@ export type FindMovieByIdQuery = { __typename?: 'Query' } & {
   >;
 };
 
+export type MomentsByMovieQueryVariables = Exact<{
+  movieRef: Scalars['String'];
+  _size?: Maybe<Scalars['Int']>;
+  _cursor?: Maybe<Scalars['String']>;
+}>;
+
+export type MomentsByMovieQuery = { __typename?: 'Query' } & {
+  momentsByMovie: { __typename?: 'QueryMomentsByMoviePage' } & Pick<
+    QueryMomentsByMoviePage,
+    'after' | 'before'
+  > & {
+      data: Array<
+        Maybe<
+          { __typename?: 'Moment' } & Pick<
+            Moment,
+            '_id' | 'timestamp' | 'description'
+          >
+        >
+      >;
+    };
+};
+
 export const UpdateMovieDocument = `
     mutation UpdateMovie($id: ID!, $data: MovieInput!) {
   updateMovie(id: $id, data: $data) {
@@ -505,6 +559,12 @@ export const UpdateMovieDocument = `
     tags {
       data {
         name
+      }
+    }
+    moments {
+      data {
+        timestamp
+        description
       }
     }
     thumbnailUrl
@@ -587,6 +647,68 @@ export const useCreateMomentMutation = <TError = unknown, TContext = unknown>(
     (variables?: CreateMomentMutationVariables) =>
       fetcher<CreateMomentMutation, CreateMomentMutationVariables>(
         CreateMomentDocument,
+        variables
+      )(),
+    options
+  );
+export const UpdateMomentDocument = `
+    mutation UpdateMoment($id: ID!, $data: MomentInput!) {
+  updateMoment(id: $id, data: $data) {
+    _ts
+    _id
+    timestamp
+    movie {
+      _id
+    }
+    description
+  }
+}
+    `;
+export const useUpdateMomentMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    UpdateMomentMutation,
+    TError,
+    UpdateMomentMutationVariables,
+    TContext
+  >
+) =>
+  useMutation<
+    UpdateMomentMutation,
+    TError,
+    UpdateMomentMutationVariables,
+    TContext
+  >(
+    (variables?: UpdateMomentMutationVariables) =>
+      fetcher<UpdateMomentMutation, UpdateMomentMutationVariables>(
+        UpdateMomentDocument,
+        variables
+      )(),
+    options
+  );
+export const DeleteMomentDocument = `
+    mutation DeleteMoment($id: ID!) {
+  deleteMoment(id: $id) {
+    _id
+  }
+}
+    `;
+export const useDeleteMomentMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    DeleteMomentMutation,
+    TError,
+    DeleteMomentMutationVariables,
+    TContext
+  >
+) =>
+  useMutation<
+    DeleteMomentMutation,
+    TError,
+    DeleteMomentMutationVariables,
+    TContext
+  >(
+    (variables?: DeleteMomentMutationVariables) =>
+      fetcher<DeleteMomentMutation, DeleteMomentMutationVariables>(
+        DeleteMomentDocument,
         variables
       )(),
     options
@@ -734,6 +856,34 @@ export const useFindMovieByIdQuery = <
     ['FindMovieByID', variables],
     fetcher<FindMovieByIdQuery, FindMovieByIdQueryVariables>(
       FindMovieByIdDocument,
+      variables
+    ),
+    options
+  );
+export const MomentsByMovieDocument = `
+    query MomentsByMovie($movieRef: String!, $_size: Int, $_cursor: String) {
+  momentsByMovie(movieRef: $movieRef, _size: $_size, _cursor: $_cursor) {
+    after
+    before
+    data {
+      _id
+      timestamp
+      description
+    }
+  }
+}
+    `;
+export const useMomentsByMovieQuery = <
+  TData = MomentsByMovieQuery,
+  TError = unknown
+>(
+  variables: MomentsByMovieQueryVariables,
+  options?: UseQueryOptions<MomentsByMovieQuery, TError, TData>
+) =>
+  useQuery<MomentsByMovieQuery, TError, TData>(
+    ['MomentsByMovie', variables],
+    fetcher<MomentsByMovieQuery, MomentsByMovieQueryVariables>(
+      MomentsByMovieDocument,
       variables
     ),
     options

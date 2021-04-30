@@ -13,6 +13,12 @@ mutation UpdateMovie($id: ID!, $data:MovieInput!) {
                 name
             }
         }
+        moments {
+            data {
+                timestamp
+                description
+            }
+        }
         thumbnailUrl
     }
 }
@@ -34,5 +40,23 @@ mutation CreateMoment($data:MomentInput!) {
             _id
         }
         description
+    }
+}
+
+mutation UpdateMoment($id: ID!, $data:MomentInput!) {
+    updateMoment(id: $id, data: $data){
+        _ts
+        _id
+        timestamp
+        movie {
+            _id
+        }
+        description
+    }
+}
+
+mutation DeleteMoment($id: ID!) {
+    deleteMoment(id: $id){
+        _id
     }
 }

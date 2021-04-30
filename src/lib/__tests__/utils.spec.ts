@@ -1,4 +1,4 @@
-import { sortByDiscNumber } from '../utils';
+import { formatSeconds, sortByDiscNumber } from '../utils';
 
 const mapToMovie = (name) => ({ name });
 
@@ -23,4 +23,10 @@ test('sortByDiscNumber', () => {
       'Disc23_twentythree',
     ].map(mapToMovie)
   );
+});
+
+test('formatSeconds', () => {
+  expect(formatSeconds(537.716223)).toEqual('00:08:57');
+  expect(formatSeconds(0)).toEqual('00:00:00');
+  expect(formatSeconds(11234)).toEqual('03:07:14');
 });

@@ -1,12 +1,8 @@
 import React from 'react';
-import videojs from 'video.js';
+import videojs, { VideoJsPlayer } from 'video.js';
 
 interface VideoPlayerProps {
-  onCaptureTimeStamp?: (ts: number) => void;
-  sources: {
-    src: string;
-    type: string;
-  }[];
+  setPlayer: (vjsPlayer: VideoJsPlayer) => void;
 }
 
 const options = {
@@ -17,12 +13,8 @@ const options = {
   controls: true,
 };
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({
-  sources,
-  onCaptureTimeStamp,
-}) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ setPlayer }) => {
   const videoRef = React.useRef(null);
-  const [player, setPlayer] = React.useState(null);
 
   React.useEffect(() => {
     const vjsPlayer = videojs(videoRef.current, options);
@@ -31,16 +23,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return () => vjsPlayer.dispose();
   }, []);
 
-  React.useEffect(() => {
-    if (player !== null) {
-      player.src(sources);
-    }
-  }, [sources, player]);
-
   return (
-    <div data-vjs-player>
-      <video ref={videoRef} className="video-js" />
-    </div>
+    <>
+      <div data-vjs-player>
+        <video ref={videoRef} className="video-js" />
+      </div>
+    </>
   );
 };
 

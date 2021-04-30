@@ -96,3 +96,17 @@ query FindMovieByID($id: ID!) {
         thumbnailUrl
     }
 }
+
+query MomentsByMovie($movieRef: String!,
+    $_size: Int
+    $_cursor: String) {
+    momentsByMovie(movieRef: $movieRef _size:$_size _cursor:$_cursor){
+        after
+        before
+        data {
+            _id
+            timestamp
+            description
+        }
+    }
+}
