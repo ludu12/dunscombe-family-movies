@@ -11,6 +11,8 @@ const options = {
   responsive: true,
   preload: 'auto',
   controls: true,
+  // https://github.com/videojs/video.js/issues/6762
+  html5: { hls: { overrideNative: true } },
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ setPlayer }) => {
