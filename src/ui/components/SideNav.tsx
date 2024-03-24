@@ -14,7 +14,7 @@ export function SideNav() {
                 className={`flex flex-row gap-4 items-center leading-none`}
             >
               <FilmIcon className="h-12 w-12 rotate-[15deg]"/>
-              <h1 className={'text-2xl block md:hidden'}>Dunscombe Family Movies</h1>
+              <h1 className={'text-2xl block md:hidden font-bold'}>Dunscombe Family Movies</h1>
             </div>
           </div>
         </Link>

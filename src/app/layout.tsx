@@ -16,7 +16,7 @@ export default function RootLayout({
         </div>
         <div className="flex-grow p-4 overflow-y-auto">
           <div className={'h-12 py-4 hidden md:block'}>
-            <h1 className={'text-2xl'}>Dunscombe Family Movies</h1>
+            <h1 className={'text-2xl font-bold'}>Dunscombe Family Movies</h1>
           </div>
           <div className={'py-6 md:py-12'}>
             {children}
