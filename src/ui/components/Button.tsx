@@ -1,15 +1,15 @@
-import clsx from "clsx";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
-import React from "react";
-import {Loading} from "@/ui/components/Loading";
+import clsx from 'clsx';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import React from 'react';
+import { Loading } from '@/ui/components/Loading';
 
 export type ButtonMode =
-  | "primary"
-  | "secondary"
-  | "accent"
-  | "ghost"
-  | "link"
-  | "none";
+  | 'primary'
+  | 'secondary'
+  | 'accent'
+  | 'ghost'
+  | 'link'
+  | 'none';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   mode?: ButtonMode;
@@ -23,7 +23,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button: React.FC<ButtonProps> = (props) => {
   const {
-    mode = "primary",
+    mode = 'primary',
     outline,
     active,
     loading,
@@ -37,14 +37,14 @@ const Button: React.FC<ButtonProps> = (props) => {
   const classes = clsx(
     `btn`,
     {
-      "text-white": mode === "primary",
-      "btn-primary": mode === "primary",
-      "btn-secondary": mode === "secondary",
-      "btn-accent": mode === "accent",
-      "btn-ghost": mode === "ghost",
-      "btn-link": mode === "link",
-      "btn-outline": outline,
-      "btn-active": active,
+      'text-white': mode === 'primary',
+      'btn-primary': mode === 'primary',
+      'btn-secondary': mode === 'secondary',
+      'btn-accent': mode === 'accent',
+      'btn-ghost': mode === 'ghost',
+      'btn-link': mode === 'link',
+      'btn-outline': outline,
+      'btn-active': active,
     },
     className,
   );

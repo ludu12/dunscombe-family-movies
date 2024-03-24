@@ -1,4 +1,4 @@
-import {Movie} from "@/types";
+import { Movie } from '@/types';
 import recordsJson from './records.json';
 const records = recordsJson as Movie[];
 
@@ -24,9 +24,9 @@ export async function fetchMovies() {
 }
 
 export async function fetchMovie(guid: string) {
-  const movie = records.find(m => m.guid === guid);
+  const movie = records.find((m) => m.guid === guid);
 
-  if(!movie){
+  if (!movie) {
     throw new Error(`Failed to find movie: ${guid}`);
   }
 

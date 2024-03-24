@@ -1,4 +1,4 @@
-const {db} = require('@vercel/postgres');
+const { db } = require('@vercel/postgres');
 // const {
 //   invoices,
 //   customers,
@@ -7,16 +7,15 @@ const {db} = require('@vercel/postgres');
 const bcrypt = require('bcrypt');
 const faunadb = require('faunadb');
 const fs = require('fs');
-const {getS3Records} = require("./s3-utils");
+const { getS3Records } = require('./s3-utils');
 
-
-const q = faunadb.query
+const q = faunadb.query;
 
 async function seedUsers(client) {
-    try {
-        await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-        // Create the "users" table if it doesn't exist
-        const createTable = await client.sql`
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+    // Create the "users" table if it doesn't exist
+    const createTable = await client.sql`
             CREATE TABLE IF NOT EXISTS users
             (
                 id
@@ -34,37 +33,37 @@ async function seedUsers(client) {
                 );
         `;
 
-        console.log(`Created "users" table`);
+    console.log(`Created "users" table`);
 
-        // Insert data into the "users" table
-        const insertedUsers = await Promise.all(
-            users.map(async (user) => {
-                const hashedPassword = await bcrypt.hash(user.password, 10);
-                return client.sql`
+    // Insert data into the "users" table
+    const insertedUsers = await Promise.all(
+      users.map(async (user) => {
+        const hashedPassword = await bcrypt.hash(user.password, 10);
+        return client.sql`
                     INSERT INTO users (id, name, email, password)
                     VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword}) ON CONFLICT (id) DO NOTHING;
                 `;
-            }),
-        );
+      }),
+    );
 
-        console.log(`Seeded ${insertedUsers.length} users`);
+    console.log(`Seeded ${insertedUsers.length} users`);
 
-        return {
-            createTable,
-            users: insertedUsers,
-        };
-    } catch (error) {
-        console.error('Error seeding users:', error);
-        throw error;
-    }
+    return {
+      createTable,
+      users: insertedUsers,
+    };
+  } catch (error) {
+    console.error('Error seeding users:', error);
+    throw error;
+  }
 }
 
 async function seedInvoices(client) {
-    try {
-        await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
-        // Create the "invoices" table if it doesn't exist
-        const createTable = await client.sql`
+    // Create the "invoices" table if it doesn't exist
+    const createTable = await client.sql`
             CREATE TABLE IF NOT EXISTS invoices
             (
                 id
@@ -83,37 +82,37 @@ async function seedInvoices(client) {
                 );
         `;
 
-        console.log(`Created "invoices" table`);
+    console.log(`Created "invoices" table`);
 
-        // Insert data into the "invoices" table
-        const insertedInvoices = await Promise.all(
-            invoices.map(
-                (invoice) => client.sql`
+    // Insert data into the "invoices" table
+    const insertedInvoices = await Promise.all(
+      invoices.map(
+        (invoice) => client.sql`
                     INSERT INTO invoices (customer_id, amount, status, date)
                     VALUES (${invoice.customer_id}, ${invoice.amount}, ${invoice.status},
                             ${invoice.date}) ON CONFLICT (id) DO NOTHING;
                 `,
-            ),
-        );
+      ),
+    );
 
-        console.log(`Seeded ${insertedInvoices.length} invoices`);
+    console.log(`Seeded ${insertedInvoices.length} invoices`);
 
-        return {
-            createTable,
-            invoices: insertedInvoices,
-        };
-    } catch (error) {
-        console.error('Error seeding invoices:', error);
-        throw error;
-    }
+    return {
+      createTable,
+      invoices: insertedInvoices,
+    };
+  } catch (error) {
+    console.error('Error seeding invoices:', error);
+    throw error;
+  }
 }
 
 async function seedMovies(client) {
-    try {
-        await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
-        // Create the "movies" table if it doesn't exist
-        const createTable = await client.sql`
+    // Create the "movies" table if it doesn't exist
+    const createTable = await client.sql`
             CREATE TABLE IF NOT EXISTS movies
             (
                 id
@@ -149,50 +148,50 @@ async function seedMovies(client) {
                 );
         `;
 
-        console.log(`Created "movies" table`);
+    console.log(`Created "movies" table`);
 
-        // Only do this if you really want to reset records and rebuild
-        // this takes awhile
-        // const data = await getS3Records();
+    // Only do this if you really want to reset records and rebuild
+    // this takes awhile
+    // const data = await getS3Records();
 
-        const records = require('./records.json')
+    const records = require('./records.json');
 
-        // Insert data into the "movies" table
-        const insertedMovies = await Promise.all(
-            records.map(
-                (movie) => client.sql`
+    // Insert data into the "movies" table
+    const insertedMovies = await Promise.all(
+      records.map(
+        (movie) => client.sql`
                     INSERT INTO movies (id, name, description, short_description, hsl_url, dash_url, mp4_url)
                     VALUES (${movie.guid}, ${movie.name}, ${movie.description}, ${movie.shortDescription},
                             ${movie.hsl_url}, ${movie.dash_url} ${movie.mp4_url}) ON CONFLICT (id) DO NOTHING;
                 `,
-            ),
-        );
+      ),
+    );
 
-        console.log(`Seeded ${insertedMovies.length} movies`);
+    console.log(`Seeded ${insertedMovies.length} movies`);
 
-        return {
-            createTable,
-            movies: insertedMovies,
-        };
-    } catch (error) {
-        console.error('Error seeding movies:', error);
-        throw error;
-    }
+    return {
+      createTable,
+      movies: insertedMovies,
+    };
+  } catch (error) {
+    console.error('Error seeding movies:', error);
+    throw error;
+  }
 }
 
 async function main() {
-    const client = await db.connect();
+  const client = await db.connect();
 
-    await seedMovies(client);
-    // await seedCustomers(client);
-    // await seedInvoices(client);
+  await seedMovies(client);
+  // await seedCustomers(client);
+  // await seedInvoices(client);
 
-    await client.end();
+  await client.end();
 }
 
 main().catch((err) => {
-    console.error(
-        'An error occurred while attempting to seed the database:',
-        err,
-    );
+  console.error(
+    'An error occurred while attempting to seed the database:',
+    err,
+  );
 });
