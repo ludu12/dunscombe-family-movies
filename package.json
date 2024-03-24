@@ -34,7 +34,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/video.js": "^7.3.57",
-    "@vercel/style-guide": "^5.0.1",
+    "@vercel/style-guide": "^6.0.0",
     "autoprefixer": "^10.0.1",
     "daisyui": "^4.8.0",
     "eslint": "^8",
