@@ -16,7 +16,10 @@ export default async function Page() {
             movies.map(m => {
               return (
                   <Link key={m.guid}
-                        href={`/movie/${m.guid}`}>
+                        href={`/movie/${m.guid}`}
+                        className={'flex'}
+
+                  >
                     <Card {...m}/>
                   </Link>
               );

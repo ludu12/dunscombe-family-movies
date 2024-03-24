@@ -1,3 +1,5 @@
+import {PlayIcon} from '@heroicons/react/24/outline';
+
 export function Card({
                        name, description, shortDescription
                      }: {
@@ -5,19 +7,17 @@ export function Card({
   description: string;
   shortDescription: string;
 }) {
+
   return (
-      <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
-        <div className="flex p-4">
-          <h3 className="text-sm font-medium">{name}</h3>
-        </div>
-        <div className={`truncate rounded-xl bg-white px-4 py-8 text-lg h-36`}>
-          <p>
-            {shortDescription}
-          </p>
-          <p className={'text-sm line-clamp-3 overflow-ellipsis whitespace-pre-wrap overflow-hidden'}>
-            {description}
-          </p>
+      <div className="card bg-base-100 shadow-xl flex-grow">
+        <div className="card-body">
+          <h3 className="text-sm italic">{name}</h3>
+          <h2 className="card-title">{shortDescription}</h2>
+          <p className={"text-sm line-clamp-3 overflow-ellipsis whitespace-pre-wrap overflow-hidden"}>{description}</p>
+          <div className="card-actions justify-end">
+            <PlayIcon className={'h-6'}/>
+          </div>
         </div>
       </div>
-  );
+  )
 }
