@@ -1,4 +1,4 @@
-import '@/ui/global.css';
+import '@/ui/global.scss';
 import { inter } from '@/ui/fonts';
 import { SideNav } from '@/ui/components/SideNav';
 

@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { Movie } from '@/types';
+import React, {useEffect} from 'react';
+import {Movie} from '@/types';
 import 'video.js/dist/video-js.css';
-import { useVideoJS } from 'react-hook-videojs';
-import { VideoJsPlayerOptions } from 'video.js';
-import videojs from 'video.js';
+import {useVideoJS} from 'react-hook-videojs';
+import videojs, {VideoJsPlayerOptions} from 'video.js';
 
 // Initialize the Chromecast plugin
 require('@silvermine/videojs-chromecast')(videojs);
@@ -15,13 +14,13 @@ const useMovieSources = (movie: Movie) => {
   return React.useMemo<{ src: string; type: string }[]>(() => {
     const sources = [];
     if (movie.DASH_URL) {
-      sources.push({ src: movie.DASH_URL, type: 'application/dash+xml' });
+      sources.push({src: movie.DASH_URL, type: 'application/dash+xml'});
     }
     if (movie.HLS_URL) {
-      sources.push({ src: movie.HLS_URL, type: 'application/x-mpegURL' });
+      sources.push({src: movie.HLS_URL, type: 'application/x-mpegURL'});
     }
     if (movie.MP4_URL) {
-      sources.push({ src: movie.MP4_URL, type: 'video/mp4' });
+      sources.push({src: movie.MP4_URL, type: 'video/mp4'});
     }
 
     return sources;
@@ -47,13 +46,13 @@ const options: VideoJsPlayerOptions = {
     chromecast: {},
   },
   // https://github.com/videojs/video.js/issues/6762
-  html5: { hls: { overrideNative: true } },
+  html5: {hls: {overrideNative: true}},
 };
 
-export function MoviePlayer({ movie }: { movie: Movie }) {
+export function MoviePlayer({movie}: { movie: Movie }) {
   const sources = useMovieSources(movie);
 
-  const { Video, player } = useVideoJS({ ...options, sources });
+  const {Video, player} = useVideoJS({...options, sources});
   useEffect(() => {
     if (player) {
       // @ts-ignore
@@ -64,8 +63,8 @@ export function MoviePlayer({ movie }: { movie: Movie }) {
   }, [player]);
 
   return (
-    <div className={'min-h-0 min-w-0'}>
-      <Video />
-    </div>
+      <div className={'min-h-0 min-w-0'}>
+        <Video/>
+      </div>
   );
 }
