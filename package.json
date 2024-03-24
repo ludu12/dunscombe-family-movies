@@ -8,9 +8,9 @@
     "lint": "next lint",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
-    "types:check": "tsc --pretty --noEmit",
     "seed": "node -r dotenv/config ./scripts/seed.js",
-    "start": "next start"
+    "start": "next start",
+    "types:check": "tsc --pretty --noEmit"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",

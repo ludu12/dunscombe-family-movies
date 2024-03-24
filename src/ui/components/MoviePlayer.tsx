@@ -4,7 +4,7 @@ import React from 'react';
 import { Movie } from '@/types';
 import 'video.js/dist/video-js.css';
 import { useVideoJS } from 'react-hook-videojs';
-import {VideoJsPlayerOptions} from "video.js";
+import { VideoJsPlayerOptions } from 'video.js';
 
 const useMovieSources = (movie: Movie) => {
   return React.useMemo<{ src: string; type: string }[]>(() => {
