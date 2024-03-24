@@ -1,0 +1,31 @@
+name: 🐛 Bug Report
+description: Something is wrong with the Stack.
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        If you have found a bug, please fill out this form.
+
+  - type: input
+    attributes:
+      label: Have you experienced this bug with the main branch?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: A concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual Behavior
+      description: A concise description of what you're experiencing.
+    validations:
+      required: true

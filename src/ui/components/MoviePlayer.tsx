@@ -4,6 +4,7 @@ import React from 'react';
 import { Movie } from '@/types';
 import 'video.js/dist/video-js.css';
 import { useVideoJS } from 'react-hook-videojs';
+import {VideoJsPlayerOptions} from "video.js";
 
 const useMovieSources = (movie: Movie) => {
   return React.useMemo<{ src: string; type: string }[]>(() => {
@@ -22,7 +23,7 @@ const useMovieSources = (movie: Movie) => {
   }, [movie.DASH_URL, movie.HLS_URL, movie.MP4_URL]);
 };
 
-const options = {
+const options: VideoJsPlayerOptions = {
   fill: true,
   fluid: true,
   responsive: true,
