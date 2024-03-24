@@ -7,13 +7,14 @@ export function SideNav() {
       <div className="flex h-full flex-col px-3 py-4 md:px-2">
         <Link
             className="mb-2 flex items-end justify-start rounded-md bg-blue-600 p-4"
-            href="/public"
+            href="/"
         >
-          <div className="w-32 text-white md:w-40">
+          <div className="text-white">
             <div
-                className={`flex flex-row items-center leading-none text-white`}
+                className={`flex flex-row gap-4 items-center leading-none text-white`}
             >
               <FilmIcon className="h-12 w-12 rotate-[15deg]"/>
+              <h1 className={'text-2xl block md:hidden'}>Dunscombe Family Movies</h1>
             </div>
           </div>
         </Link>

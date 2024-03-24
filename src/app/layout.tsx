@@ -14,8 +14,13 @@ export default function RootLayout({
         <div className="w-full flex-none md:w-64">
           <SideNav/>
         </div>
-        <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
-          {children}
+        <div className="flex-grow p-4 overflow-y-auto">
+          <div className={'h-12 py-4 hidden md:block'}>
+            <h1 className={'text-2xl'}>Dunscombe Family Movies</h1>
+          </div>
+          <div className={'py-6 md:py-12'}>
+            {children}
+          </div>
         </div>
       </div>
       </body>

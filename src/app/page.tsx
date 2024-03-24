@@ -10,13 +10,13 @@ export const metadata: Metadata = {
 export default async function Page() {
   const movies = await fetchMovies();
   return (
-      <main className="flex min-h-screen flex-col items-center justify-between px-24 py-12">
+      <main className="flex min-h-screen flex-col items-center justify-between ">
         <div className={'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'}>
           {
             movies.map(m => {
               return (
                   <Link key={m.guid}
-                        href={`/${m.guid}`}>
+                        href={`/movie/${m.guid}`}>
                     <Card {...m}/>
                   </Link>
               );
