@@ -42,7 +42,7 @@
     "autoprefixer": "^10.0.1",
     "daisyui": "^4.9.0",
     "eslint": "^8",
-    "eslint-config-next": "14.1.4",
+    "eslint-config-next": "14.2.4",
     "faunadb": "^4.8.0",
     "postcss": "^8",
     "prettier": "^3.0.3",
